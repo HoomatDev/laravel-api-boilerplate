@@ -1,0 +1,39 @@
+{
+    "name": "hoomat/filesystem",
+    "description": "this package help to manage all files",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alireza Rahimi",
+            "email": "rahimi@hoomatdev.ir"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "10.0.x-dev",
+        "knuckleswtf/scribe": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hoomat\\Filesystem\\Tests\\": "tests/",
+            "Hoomat\\Filesystem\\": "src/",
+            "Hoomat\\Filesystem\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hoomat\\Filesystem\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "livewire/livewire": "^2.10"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hoomat\\Filesystem\\Providers\\FileSystemServiceProvider"
+            ]
+        }
+    }
+}

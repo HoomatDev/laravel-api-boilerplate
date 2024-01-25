@@ -1,0 +1,39 @@
+{
+    "name": "hoomat/notifications",
+    "description": "this package manage notifications",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alireza Rahimi",
+            "email": "rahimi@hoomatdev.ir"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "10.0.x-dev",
+        "knuckleswtf/scribe": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hoomat\\Notifications\\Tests\\": "tests/",
+            "Hoomat\\Notifications\\": "src/",
+            "Hoomat\\Notifications\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+          "Hoomat\\Notifications\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hoomat\\Notifications\\Providers\\NotificationServiceProvider"
+            ]
+        }
+    },
+  "require": {
+    "ext-soap": "*"
+  }
+}

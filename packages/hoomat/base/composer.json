@@ -1,0 +1,19 @@
+{
+    "name": "hoomat/base",
+    "description": "Base Modules of Projects",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hoomat\\Base\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alireza Rahimi",
+            "email": "alireza.rahimi.dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
