@@ -128,7 +128,7 @@ class {CLASS_NAME} extends BaseModel
 {
     use HasDate, HasFilter, HasSearch, HasSort, HasEagerLoad;
 
-    protected \$fillable = [];
+    protected \$guarded = [];
 }",
 
         'dto' => "namespace {PACKAGE_PATH}\App\Models\DTOs;
@@ -304,7 +304,7 @@ class {CLASS_NAME}Policy
      */
     public function viewAny(User \$user)
     {
-        //
+        return true;
     }
 
     /**
@@ -316,7 +316,7 @@ class {CLASS_NAME}Policy
      */
     public function view(User \$user, {CLASS_NAME} \${ITEM_NAME})
     {
-        //
+        return true;
     }
 
     /**
@@ -327,7 +327,7 @@ class {CLASS_NAME}Policy
      */
     public function create(User \$user)
     {
-        //
+        return true;
     }
 
     /**
@@ -339,7 +339,7 @@ class {CLASS_NAME}Policy
      */
     public function update(User \$user, {CLASS_NAME}  \${ITEM_NAME})
     {
-        //
+        return true;
     }
 
     /**
@@ -351,7 +351,7 @@ class {CLASS_NAME}Policy
      */
     public function delete(User \$user, {CLASS_NAME}  \${ITEM_NAME})
     {
-        //
+        return true;
     }
 
     /**
@@ -363,7 +363,7 @@ class {CLASS_NAME}Policy
      */
     public function restore(User \$user, {CLASS_NAME}  \${ITEM_NAME})
     {
-        //
+        return true;
     }
 
     /**
@@ -375,7 +375,7 @@ class {CLASS_NAME}Policy
      */
     public function forceDelete(User \$user, {CLASS_NAME}  \${ITEM_NAME})
     {
-        //
+        return true;
     }
 }",
 
@@ -393,7 +393,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 
 /**
- * @group {PACKAGE_PATH}
+ * @group {PACKAGE_NAME}
  * @subgroup {CLASS_NAME}
  */
 class {CLASS_NAME}Controller extends Controller

@@ -27,7 +27,7 @@ class Controller extends BaseController
         mixed $data, mixed $resourceClass, string $msg = 'success'
     ): JsonResponse
     {
-        $resData = ['item' => $resourceClass::collection($data)];
+        $resData = ['item' => $resourceClass::make($data)];
         if ($data instanceof LengthAwarePaginator) {
             $resData = [
                 'items' => $resourceClass::collection($data->items()),
