@@ -13,7 +13,9 @@ class MakeCrud extends Command
      *
      * @var string
      */
-    protected $signature = 'builder:make-crud {crud} {--package=}';
+    protected $signature = '
+    builder:make-crud {crud} {--package=} {--string-field=*} {--int-field=*} {--float-field=*} {--uuid-field=*} {--date-field=*} {--datetime-field=*} {--text-field=*} {--bool-field=*} {--belongs-to=*} {--has-many=*}
+    ';
 
     /**
      * The console command description.
@@ -37,7 +39,11 @@ class MakeCrud extends Command
         try {
             Log::info('start builder:make-crud at '.now());
 
-            $this->crudService->make($this->option('package'), $this->argument('crud'));
+            $allOptions = $this->options();
+            $LaravelDefaultOptions = $this->getApplication()->getDefinition()->getOptions();
+            $options = array_diff_key($allOptions, $LaravelDefaultOptions);
+
+            $this->crudService->make($this->argument('crud'), $options);
 
             Log::info('finished builder:make-crud at '.now());
         } catch(\Throwable $th) {

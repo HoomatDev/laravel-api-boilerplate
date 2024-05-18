@@ -97,6 +97,9 @@ return new class extends Migration
     {
         Schema::create('{TABLE_NAME}', function (Blueprint \$table) {
             \$table->id();
+
+{CONTENT}
+
             \$table->timestamps();
         });
     }
@@ -120,15 +123,21 @@ use Hoomat\Base\App\Traits\HasEagerLoad;
 use Hoomat\Base\App\Traits\HasFilter;
 use Hoomat\Base\App\Traits\HasSearch;
 use Hoomat\Base\App\Traits\HasSort;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+{IMPORTS_CONTENT}
 
 /**
  * @property int \$id
+{CONTENT}
  */
 class {CLASS_NAME} extends BaseModel
 {
     use HasDate, HasFilter, HasSearch, HasSort, HasEagerLoad;
 
     protected \$guarded = [];
+
+{RELATIONS_CONTENT}
 }",
 
         'dto' => "namespace {PACKAGE_PATH}\App\Models\DTOs;
@@ -138,6 +147,7 @@ use Hoomat\Base\App\Models\BaseDTO;
 class {CLASS_NAME}DTO extends BaseDTO
 {
     public function __construct(
+{CONTENT}
     )
     {}
 }",
@@ -181,6 +191,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class {CLASS_NAME}FilterScope extends FilterScope
 {
+{CONTENT}
 }",
 
         'load_scope' => "namespace {PACKAGE_PATH}\App\Scopes\{CLASS_NAME};
@@ -190,6 +201,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class {CLASS_NAME}LoadScope extends EagerLoadScope
 {
+{CONTENT}
 }",
 
         'sort_scope' => "namespace {PACKAGE_PATH}\App\Scopes\{CLASS_NAME};
@@ -231,6 +243,7 @@ class {CLASS_NAME}Service extends BaseService
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+{IMPORTS_CONTENT}
 
 class {CLASS_NAME}Resource extends JsonResource
 {
@@ -238,6 +251,8 @@ class {CLASS_NAME}Resource extends JsonResource
     {
         return [
             'id' => \$this->id,
+{CONTENT}
+            'created_at' => \$this->created_at
         ];
     }
 }",
@@ -251,7 +266,9 @@ class {CLASS_NAME}IndexRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            'search' => ['sometimes', 'nullable', 'string'],
+            'page' => ['sometimes', 'nullable', 'int', 'min:1'],
+            'limit' => ['sometimes', 'nullable', 'int', 'min:1']
         ];
     }
 }",
@@ -265,7 +282,7 @@ class {CLASS_NAME}StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+{CONTENT}
         ];
     }
 }",
@@ -279,7 +296,7 @@ class {CLASS_NAME}UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+{CONTENT}
         ];
     }
 }",
@@ -302,7 +319,7 @@ class {CLASS_NAME}Policy
      * @param  User  \$user
      * @return Response|bool
      */
-    public function viewAny(User \$user)
+    public function viewAny(User \$user): Response|bool
     {
         return true;
     }
@@ -314,7 +331,7 @@ class {CLASS_NAME}Policy
      * @param  {CLASS_NAME}  \${ITEM_NAME}
      * @return Response|bool
      */
-    public function view(User \$user, {CLASS_NAME} \${ITEM_NAME})
+    public function view(User \$user, {CLASS_NAME} \${ITEM_NAME}): Response|bool
     {
         return true;
     }
@@ -325,7 +342,7 @@ class {CLASS_NAME}Policy
      * @param  User  \$user
      * @return Response|bool
      */
-    public function create(User \$user)
+    public function create(User \$user): Response|bool
     {
         return true;
     }
@@ -337,7 +354,7 @@ class {CLASS_NAME}Policy
      * @param  {CLASS_NAME}  \${ITEM_NAME}
      * @return Response|bool
      */
-    public function update(User \$user, {CLASS_NAME}  \${ITEM_NAME})
+    public function update(User \$user, {CLASS_NAME}  \${ITEM_NAME}): Response|bool
     {
         return true;
     }
@@ -349,7 +366,7 @@ class {CLASS_NAME}Policy
      * @param  {CLASS_NAME}  \${ITEM_NAME}
      * @return Response|bool
      */
-    public function delete(User \$user, {CLASS_NAME}  \${ITEM_NAME})
+    public function delete(User \$user, {CLASS_NAME}  \${ITEM_NAME}): Response|bool
     {
         return true;
     }
@@ -361,7 +378,7 @@ class {CLASS_NAME}Policy
      * @param  {CLASS_NAME}  \${ITEM_NAME}
      * @return Response|bool
      */
-    public function restore(User \$user, {CLASS_NAME}  \${ITEM_NAME})
+    public function restore(User \$user, {CLASS_NAME}  \${ITEM_NAME}): Response|bool
     {
         return true;
     }
@@ -373,7 +390,7 @@ class {CLASS_NAME}Policy
      * @param  {CLASS_NAME}  \${ITEM_NAME}
      * @return Response|bool
      */
-    public function forceDelete(User \$user, {CLASS_NAME}  \${ITEM_NAME})
+    public function forceDelete(User \$user, {CLASS_NAME}  \${ITEM_NAME}): Response|bool
     {
         return true;
     }
