@@ -14,7 +14,7 @@ class MakeCrud extends Command
      * @var string
      */
     protected $signature = '
-    builder:make-crud {crud} {--package=} {--string-field=*} {--int-field=*} {--float-field=*} {--uuid-field=*} {--date-field=*} {--datetime-field=*} {--text-field=*} {--bool-field=*} {--belongs-to=*} {--has-many=*}
+    builder:make-crud {crud} {--package=} {--string=*} {--int=*} {--float=*} {--uuid=*} {--date=*} {--datetime=*} {--text=*} {--bool=*} {--belongs-to=*} {--has-many=*}
     ';
 
     /**

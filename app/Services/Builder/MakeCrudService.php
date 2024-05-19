@@ -97,14 +97,14 @@ class MakeCrudService
     {
         foreach ($this->options as $optionKey => $optionValue) {
             foreach ($optionValue as $field) {
-                $option = substr($optionKey, 0, -6);
+//                $option = substr($optionKey, 0, -6);
 
                 if ($optionKey === 'belongs-to') {
                     $data = $this->makeForeignField($field);
                 } else if ($optionKey === 'has-many') {
                     $data = $this->makeHasManyField($field);
                 } else {
-                    $data = $this->makeAndCleanField($option, $field);
+                    $data = $this->makeAndCleanField($optionKey, $field);
                 }
 
                 foreach ($data as $key => $value) {
