@@ -43,9 +43,6 @@ class UserController extends Controller
                 ->upload();
         }
 
-        return $this->dynamicResponse(
-            $this->userService->show($user->id),
-            UserResource::class
-        );
+        return $this->successResponse(UserResource::make($this->userService->show($user->id)));
     }
 }

@@ -9,11 +9,7 @@
             "email": "rahimi@hoomatdev.ir"
         }
     ],
-    "minimum-stability": "stable",
-    "require-dev": {
-        "phpunit/phpunit": "10.0.x-dev",
-        "knuckleswtf/scribe": "dev-master"
-    },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Hoomat\\Filesystem\\Tests\\": "tests/",
@@ -25,9 +21,6 @@
         "psr-4": {
             "Hoomat\\Filesystem\\Tests\\": "tests/"
         }
-    },
-    "require": {
-        "livewire/livewire": "^2.10"
     },
     "extra": {
         "laravel": {

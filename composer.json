@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "dedoc/scramble": "^0.8.6",
+        "doctrine/dbal": "^3.9",
         "guzzlehttp/guzzle": "^7.2",
         "hekmatinasser/verta": "^8.3",
         "hoomat/base": "@dev",
@@ -23,7 +25,6 @@
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "fakerphp/faker": "^1.9.1",
-        "knuckleswtf/scribe": "^4.23",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",

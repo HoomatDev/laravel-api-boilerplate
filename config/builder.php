@@ -118,11 +118,6 @@ return new class extends Migration
         'model' => "namespace {PACKAGE_PATH}\App\Models;
 
 use Hoomat\Base\App\Models\BaseModel;
-use Hoomat\Base\App\Traits\HasDate;
-use Hoomat\Base\App\Traits\HasEagerLoad;
-use Hoomat\Base\App\Traits\HasFilter;
-use Hoomat\Base\App\Traits\HasSearch;
-use Hoomat\Base\App\Traits\HasSort;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 {IMPORTS_CONTENT}
@@ -133,8 +128,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class {CLASS_NAME} extends BaseModel
 {
-    use HasDate, HasFilter, HasSearch, HasSort, HasEagerLoad;
-
     protected \$guarded = [];
 
 {RELATIONS_CONTENT}
@@ -431,7 +424,7 @@ class {CLASS_NAME}Controller extends Controller
     {
         Gate::authorize('viewAny', [{CLASS_NAME}::class]);
         \$items = \$this->{ITEM_NAME}Service->index();
-        return \$this->dynamicResponse(\$items, {CLASS_NAME}Resource::class);
+        return \$this->paginatedResponse(\$items, {CLASS_NAME}Resource::collection(\$items));
     }
 
 
@@ -445,7 +438,7 @@ class {CLASS_NAME}Controller extends Controller
     {
         Gate::authorize('view', \${ITEM_NAME});
         \$item = \$this->{ITEM_NAME}Service->show(\${ITEM_NAME}->id);
-        return \$this->dynamicResponse(\$item, {CLASS_NAME}Resource::class);
+        return \$this->successResponse({CLASS_NAME}Resource::make(\$item));
     }
 
 
@@ -460,7 +453,7 @@ class {CLASS_NAME}Controller extends Controller
         Gate::authorize('create', [{CLASS_NAME}::class]);
         \$item = \$this->{ITEM_NAME}Service->create({CLASS_NAME}DTO::fromRequest(\$request));
         \$item = \$this->{ITEM_NAME}Service->show(\$item->id);
-        return \$this->dynamicResponse(\$item, {CLASS_NAME}Resource::class);
+        return \$this->successResponse({CLASS_NAME}Resource::make(\$item));
     }
 
 
@@ -476,7 +469,7 @@ class {CLASS_NAME}Controller extends Controller
         Gate::authorize('update', \${ITEM_NAME});
         \$this->{ITEM_NAME}Service->update(\${ITEM_NAME}, {CLASS_NAME}DTO::fromModel(\${ITEM_NAME}, \$request->all()));
         \$item = \$this->{ITEM_NAME}Service->show(\${ITEM_NAME}->id);
-        return \$this->dynamicResponse(\$item, {CLASS_NAME}Resource::class);
+        return \$this->successResponse({CLASS_NAME}Resource::make(\$item));
     }
 
 

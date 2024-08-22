@@ -32,6 +32,6 @@ class EagerLoadScope
 
     public function with(): array
     {
-        return $this->request->input('with');
+        return $this->request->input('with') ?? [];
     }
 }

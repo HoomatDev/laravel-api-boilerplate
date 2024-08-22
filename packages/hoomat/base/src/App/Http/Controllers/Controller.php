@@ -19,42 +19,36 @@ class Controller extends BaseController
      * Send an Array of Items as SuccessResponse
      *
      * @param mixed  $data
-     * @param mixed  $resourceClass
+     * @param        $collection
      * @param string $msg
      * @return JsonResponse
      */
-    public function dynamicResponse(
-        mixed $data, mixed $resourceClass, string $msg = 'success'
-    ): JsonResponse
+    public function paginatedResponse(mixed $data, $collection, string $msg = 'success'): JsonResponse
     {
-        $resData = ['item' => $resourceClass::make($data)];
         if ($data instanceof LengthAwarePaginator) {
-            $resData = [
-                'items' => $resourceClass::collection($data->items()),
-                'links' => PaginationResource::make($data)
-            ];
-        } else if ($data instanceof Collection || is_array($data)) {
-            $resData = ['items' => $resourceClass::collection($data)];
+            $pagination = PaginationResource::make($data);
         }
 
-        return $this->successResponse($resData, $msg);
+        return $this->successResponse($collection, $msg, $pagination ?? null);
     }
 
 
     /**
      * Send a SuccessResponse
      *
-     * @param mixed   $data
-     * @param string  $msg
+     * @param mixed  $data
+     * @param string $msg
+     * @param null   $pagination
      * @return JsonResponse
      */
-    public function successResponse(mixed $data = [], string $msg = 'success'): JsonResponse
+    public function successResponse(mixed $data = [], string $msg = 'success', $pagination = null): JsonResponse
     {
         return response()->json([
             'error' => false,
             'message' => $msg,
-            'data' => $data
-        ], 200);
+            'data' => $data,
+            'links' => $pagination
+        ]);
     }
 
 

@@ -3,7 +3,6 @@
 namespace Hoomat\Filesystem\App\Http\Controllers;
 
 use Hoomat\Base\App\Http\Controllers\Controller;
-use Hoomat\Filesystem\App\Facades\Uploader;
 use Hoomat\Filesystem\App\Http\Requests\FileUpdateRequest;
 use Hoomat\Filesystem\App\Http\Resources\FilesystemResource;
 use Hoomat\Filesystem\App\Models\File;
@@ -55,9 +54,8 @@ class FileController extends Controller
 
         $this->fileService->updateFile($request, $file);
 
-        return $this->dynamicResponse(
-            $this->fileService->show($file->id),
-            FilesystemResource::class
+        return $this->successResponse(
+            FilesystemResource::make($this->fileService->show($file->id))
         );
     }
 

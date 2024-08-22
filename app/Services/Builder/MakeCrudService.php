@@ -180,13 +180,13 @@ class MakeCrudService
 
         $make = $this->makeField($fieldName, 'foreign');
         $make['model'] .= "\n * @property ".ucfirst($field)." \$$field";
-        $make['resource'] .= "\n\t\t\t'".$field."' => $resourceName::make(\$this->whenLoaded('".$field."')),";
 
-        unset($make['request_store'], $make['request_update'], $make['filter_scope']);
+        unset($make['request_store'], $make['request_update'], $make['filter_scope'], $make['resource']);
 
         return $make + [
             'request_store' => "\n\t\t\t'".$fieldName."' => ['required', 'int', 'exists:$tableName,id'],",
             'request_update' => "\n\t\t\t'".$fieldName."' => ['required', 'int', 'exists:$tableName,id'],",
+            'resource' => "\n\t\t\t'".$field."' => $resourceName::make(\$this->whenLoaded('".$field."')),",
             'resource_imports' => "\nuse $resource;",
             'filter_scope' => "\n\n\tpublic function $field(\$term): Builder
     {
@@ -200,7 +200,7 @@ class MakeCrudService
             'model_relations' => "\n\n\tpublic function $field(): BelongsTo
     {
         return \$this->belongsTo(".ucfirst($field)."::class);
-    }",
+    }"
         ];
     }
 
@@ -240,7 +240,7 @@ class MakeCrudService
             'model_relations' => "\n\n\tpublic function $fieldPlural(): HasMany
     {
         return \$this->hasMany($fieldClassName::class);
-    }",
+    }"
             ];
     }
 

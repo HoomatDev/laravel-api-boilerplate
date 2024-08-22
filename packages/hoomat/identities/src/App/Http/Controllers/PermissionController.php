@@ -29,6 +29,6 @@ class PermissionController extends Controller
     public function index(ServiceRequiredRequest $request): JsonResponse
     {
         $permissions = $this->permissionService->index();
-        return $this->dynamicResponse($permissions, PermissionResource::class);
+        return $this->paginatedResponse($permissions, PermissionResource::collection($permissions));
     }
 }

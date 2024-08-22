@@ -32,7 +32,7 @@ class RoleController extends Controller
     public function index(ServiceRequiredRequest $request): JsonResponse
     {
         $roles = $this->roleService->index();
-        return $this->dynamicResponse($roles, RoleResource::class);
+        return $this->paginatedResponse($roles, RoleResource::collection($roles));
     }
 
 
@@ -48,7 +48,7 @@ class RoleController extends Controller
 
         $role = $this->roleService->createNewRole(RoleDTO::fromRequest($request), $permissions);
         $role = $this->roleService->show($role->id);
-        return $this->dynamicResponse($role, RoleResource::class);
+        return $this->successResponse(RoleResource::make($role));
     }
 
 
@@ -65,6 +65,6 @@ class RoleController extends Controller
 
         $this->roleService->updateRole($role, RoleDTO::fromModel($role, $request->all()), $permissions);
         $role = $this->roleService->show($role->id);
-        return $this->dynamicResponse($role, RoleResource::class);
+        return $this->successResponse(RoleResource::make($role));
     }
 }

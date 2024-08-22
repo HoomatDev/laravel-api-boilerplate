@@ -21,8 +21,7 @@ use Illuminate\Http\JsonResponse;
 class NotificationController extends Controller
 {
     public function __construct(
-        private readonly NotificationService        $notificationService,
-        private readonly SendNotificationService    $sendNotifService
+        private readonly NotificationService        $notificationService
     )
     {
     }
@@ -38,7 +37,7 @@ class NotificationController extends Controller
     {
         $notifications = $this->notificationService->index();
 
-        return $this->dynamicResponse($notifications, NotificationResource::class);
+        return $this->paginatedResponse($notifications, NotificationResource::collection($notifications));
     }
 
 
@@ -54,17 +53,7 @@ class NotificationController extends Controller
             ->details($request->input('details'))
             ->type($request->input('type'))
             ->sendAt($request->input('send_at') ?? now());
-        // $notif = $this->sendNotifService
-        //     ->text($request->input('text'))
-        //     ->details($request->input('details'))
-        //     ->type($request->input('type'))
-        //     ->sendAt($request->input('send_at') ?? now());
 
-        // if ($request->hasFile('image')) {
-        //     $notif = $notif->image($request->file('image'));
-        // }
-
-        // $notif->send();
         return $this->successResponse();
     }
 
@@ -77,9 +66,8 @@ class NotificationController extends Controller
      */
     public function show(Notification $notification): JsonResponse
     {
-        return $this->dynamicResponse(
-            $this->notificationService->show($notification->id),
-            NotificationSingleResource::class
+        return $this->successResponse(
+            NotificationSingleResource::make($this->notificationService->show($notification->id))
         );
     }
 
