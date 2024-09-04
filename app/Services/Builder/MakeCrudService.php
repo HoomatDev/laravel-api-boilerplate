@@ -253,21 +253,17 @@ class MakeCrudService
      */
     private function makeField(string $fieldName, string $type): array
     {
-        $migrationFieldType = $this->getMigrationType($type);
         $modelFieldType = $this->getModelType($type);
-        $requestFieldType = $this->getValidatorType($type);
-
-        $migration = $type === 'foreign' ?
-            "\$table->$migrationFieldType('".$fieldName."')->constrained();" :
-            "\$table->$migrationFieldType('".$fieldName."');";
+        $migration = $this->getMigrationValue($fieldName, $type);
+        $requests = $this->getValidatorValue($type);
 
         return [
             'migration' => "\n\t\t\t".$migration,
             'model' => "\n * @property $modelFieldType \$$fieldName",
             'dto' => "\n\t\tpublic $modelFieldType \$$fieldName,",
             'resource' => "\n\t\t\t'".$fieldName."' => \$this->".$fieldName.",",
-            'request_store' => "\n\t\t\t'".$fieldName."' => ['required', '$requestFieldType'],",
-            'request_update' => "\n\t\t\t'".$fieldName."' => ['required', '$requestFieldType'],",
+            'request_store' => "\n\t\t\t'".$fieldName."' => $requests,",
+            'request_update' => "\n\t\t\t'".$fieldName."' => $requests,",
             'filter_scope' => "\n\n\tpublic function $fieldName(\$term): Builder
     {
         return \$this->builder->where('".$fieldName."', \$term);
@@ -278,9 +274,9 @@ class MakeCrudService
 
     private function cleanFieldData(string $option, string $field, array $data): array
     {
-        if (in_array($option, ['string', 'text', 'date', 'datetime'])) {
+        if (in_array($option, ['string', 'text', 'date', 'datetime', 'nstring', 'ntext', 'ndate', 'ndatetime', 'json', 'njson'])) {
             unset($data['filter_scope']);
-            if ($option === 'date' || $option === 'datetime') {
+            if (in_array($option, ['date', 'datetime', 'ndate', 'ndatetime'])) {
                 $data += ['filter_scope' => "\n\n\tpublic function $field(\$term): Builder
     {
         return \$this->builder->where('".$field."', '>=', \$term['from'])
@@ -296,9 +292,16 @@ class MakeCrudService
     private function getMigrationType(string $type): string
     {
         return match ($type) {
-            'int' => 'unsignedInteger',
+            'int', 'nint' => 'unsignedInteger',
             'foreign' => 'foreignId',
-            'bool' => 'boolean',
+            'bool', 'nbool' => 'boolean',
+            'nstring' => 'string',
+            'ntext' => 'text',
+            'nuuid' => 'uuid',
+            'nfloat' => 'float',
+            'ndate' => 'date',
+            'ndatetime' => 'datetime',
+            'njson' => 'json',
             default => $type
         };
     }
@@ -307,8 +310,12 @@ class MakeCrudService
     private function getModelType(string $type): string
     {
         return match ($type) {
-            'date', 'datetime' => 'mixed',
+            'date', 'datetime', 'json', 'ndate', 'ndatetime', 'njson' => 'mixed',
             'uuid', 'text' => 'string',
+            'nuuid', 'ntext', 'nstring' => '?string',
+            'nint' => '?int',
+            'nfloat' => '?float',
+            'nbool' => '?bool',
             'foreign' => 'int',
             default => $type
         };
@@ -318,10 +325,48 @@ class MakeCrudService
     private function getValidatorType(string $type): string
     {
         return match ($type) {
-            'text' => 'string',
-            'bool' => 'boolean',
-            'int' => 'integer',
+            'text', 'nstring', 'ntext' => 'string',
+            'bool', 'nbool' => 'boolean',
+            'int', 'nint' => 'integer',
+            'nuuid' => 'uuid',
+            'nfloat' => 'float',
+            'njson' => 'json',
+            'ndate' => 'date',
+            'ndatetime' => 'datetime',
             default => $type
         };
+    }
+
+
+    private function getMigrationValue(string $fieldName, string $type): string
+    {
+        $migrationFieldType = $this->getMigrationType($type);
+        $isNull = $this->isNullableField($type);
+
+        $migration = "\$table->$migrationFieldType('".$fieldName."')";
+        if ($isNull) {
+            $migration .= "->nullable()";
+        }
+        if ($type === 'foreign') {
+            $migration .= "->constrained()";
+        }
+
+        return $migration . ';';
+    }
+
+
+    private function getValidatorValue(string $type): string
+    {
+        $requestFieldType = $this->getValidatorType($type);
+
+        return $this->isNullableField($type) ?
+            "['sometimes', 'nullable', '$requestFieldType']" :
+            "['required', '$requestFieldType']";
+    }
+
+
+    private function isNullableField(string $type): bool
+    {
+        return in_array($type, ['nstring', 'ntext', 'nuuid', 'nint', 'nfloat', 'nbool', 'ndate', 'ndatetime', 'njson']);
     }
 }
